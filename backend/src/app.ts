@@ -1,10 +1,10 @@
-import { CLIENT_BASE_URL, PORT } from '#config';
-import '#db';
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import { errorHandler, notFoundHandler } from '#middleware';
-import { authRoutes, bookRoutes } from '#routes';
+import { CLIENT_BASE_URL, PORT } from "#config";
+import "#db";
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import { errorHandler, notFoundHandler } from "#middleware";
+import { authRoutes, bookRoutes } from "#routes";
 
 const app = express();
 
@@ -17,18 +17,20 @@ app.use(
     // origin: 'http://localhost:5173'
     origin: CLIENT_BASE_URL, // aus der env
     credentials: true, // für secure cookies
-    exposedHeaders: ['WWW-Authenticate'] // für den Refresh-Token-Cycle
-  })
+    exposedHeaders: ["WWW-Authenticate"], // für den Refresh-Token-Cycle
+  }),
 );
 
 app.use(express.json(), cookieParser());
 
-app.use('/auth', authRoutes);
-app.use('/books', bookRoutes);
+app.use("/auth", authRoutes);
+app.use("/books", bookRoutes);
 
-app.use('*splat', notFoundHandler);
+app.use("*splat", notFoundHandler);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Auth Server listening on http://localhost:${PORT}`);
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Auth Server listening on http://localhost:${port}`);
 });

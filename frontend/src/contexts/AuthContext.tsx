@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ToasterContext } from './ToasterContext.tsx';
-import type { LoginForm, RegisterForm, User } from '@/types/index.ts';
+import type { LoginForm, RegisterForm, User } from "@/types/index.ts";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToasterContext } from "./ToasterContext.tsx";
 
 export interface AuthContextType {
   user: User | null;
@@ -30,22 +30,22 @@ const AuthContextProvider = ({ children }: Props) => {
   const register = async (formState: RegisterForm) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formState),
-        credentials: 'include',
+        credentials: "include",
       });
 
-      if (!res.ok) throw new Error('Error registering');
+      if (!res.ok) throw new Error("Error registering");
       const data = await res.json();
 
       console.log(data);
       setUser(data.user);
 
       toaster?.success(`Welcome on board, ${data.user.firstName}`);
-      navigate('/books');
+      navigate("/books");
     } catch (error) {
       if (error instanceof Error) {
         toaster?.error(error.message);
@@ -56,15 +56,15 @@ const AuthContextProvider = ({ children }: Props) => {
   const login = async (formState: LoginForm) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formState),
-        credentials: 'include',
+        credentials: "include",
       });
 
-      if (!res.ok) throw new Error('Error logging in');
+      if (!res.ok) throw new Error("Error logging in");
       const data = await res.json();
 
       console.log(data);
@@ -72,7 +72,7 @@ const AuthContextProvider = ({ children }: Props) => {
 
       toaster?.success(`Welcome back, ${data.user.firstName}`);
 
-      navigate('/books');
+      navigate("/books");
     } catch (error) {
       if (error instanceof Error) {
         toaster?.error(error.message);
@@ -83,18 +83,18 @@ const AuthContextProvider = ({ children }: Props) => {
   const logout = async () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
-        method: 'DELETE',
-        credentials: 'include',
+        method: "DELETE",
+        credentials: "include",
       });
-      if (!res.ok) throw new Error('Error logging out');
+      if (!res.ok) throw new Error("Error logging out");
 
       setUser(null);
 
-      navigate('/');
+      navigate("/");
 
       toaster?.success(`Bye`);
     } catch {
-      toaster?.error('Logout failed. Please try again.');
+      toaster?.error("Logout failed. Please try again.");
     }
   };
 
@@ -102,15 +102,15 @@ const AuthContextProvider = ({ children }: Props) => {
     const refresh = async () => {
       try {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
-          method: 'GET',
-          credentials: 'include',
+          method: "GET",
+          credentials: "include",
         });
 
         const data = await res.json();
 
         setUser(data.user);
       } catch {
-        navigate('/');
+        navigate("/");
       } finally {
         setIsRefreshing(false);
       }
@@ -118,7 +118,11 @@ const AuthContextProvider = ({ children }: Props) => {
     if (isRefreshing) refresh();
   }, []);
 
-  return <AuthContext value={{ user, setUser, register, login, logout, isRefreshing }}>{children}</AuthContext>;
+  return (
+    <AuthContext value={{ user, setUser, register, login, logout, isRefreshing }}>
+      {children}
+    </AuthContext>
+  );
 };
 
 export default AuthContextProvider;

@@ -1,8 +1,8 @@
 {
   "name": "express-ts-template",
   "version": "1.0.0",
-  "main": "app.ts",
   "type": "module",
+  "main": "app.ts",
   "imports": {
     "#controllers": {
       "development": "./src/controllers/index.ts",
@@ -39,10 +39,9 @@
   },
   "scripts": {
     "dev": "node --watch --conditions=development --env-file=.env.development.local src/app.ts",
-    "prebuild": "rm -rf dist",
     "build": "tsc",
-    "prestart": "npm run build",
-    "start": "node --env-file=.env.production.local dist/app.js"
+    "start": "node dist/app.js",
+    "build:local": "rm -fr dist && npm run build"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
