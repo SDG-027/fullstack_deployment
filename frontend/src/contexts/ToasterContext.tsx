@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState, createContext, ReactNode } from 'react';
+import { useEffect, useRef, useState, createContext, ReactNode } from "react";
 
 const colors = {
-  success: 'hsl(120, 61%, 50%)',
-  error: 'hsl(0, 100%, 50%)',
-  neutral: 'hsl(208, 37%, 45%)',
+  success: "hsl(120, 61%, 50%)",
+  error: "hsl(0, 100%, 50%)",
+  neutral: "hsl(208, 37%, 45%)",
 };
 
-type ToastState = 'success' | 'error' | 'neutral';
+type ToastState = "success" | "error" | "neutral";
 
 interface ToastMessage {
   msg: string;
@@ -35,15 +35,18 @@ interface ToasterProviderProps {
   styles?: ToastStyles;
 }
 
-const ToasterProvider = ({ children, styles = { position: 'top-left' } }: ToasterProviderProps) => {
+const ToasterProvider = ({ children, styles = { position: "top-left" } }: ToasterProviderProps) => {
   const [messages, setMessages] = useState<ToastMessage[]>([]);
 
   const deleteToast = (msgId: string) => setMessages((prev) => prev.filter((m) => m.id !== msgId));
 
   const toaster = useRef<Toaster>({
-    toast: (msg: string) => setMessages((prev) => [...prev, { msg, id: crypto.randomUUID(), state: 'neutral' }]),
-    success: (msg: string) => setMessages((prev) => [...prev, { msg, id: crypto.randomUUID(), state: 'success' }]),
-    error: (msg: string) => setMessages((prev) => [...prev, { msg, id: crypto.randomUUID(), state: 'error' }]),
+    toast: (msg: string) =>
+      setMessages((prev) => [...prev, { msg, id: crypto.randomUUID(), state: "neutral" }]),
+    success: (msg: string) =>
+      setMessages((prev) => [...prev, { msg, id: crypto.randomUUID(), state: "success" }]),
+    error: (msg: string) =>
+      setMessages((prev) => [...prev, { msg, id: crypto.randomUUID(), state: "error" }]),
   });
 
   return (
@@ -71,7 +74,7 @@ interface ToastProps {
 
 const Toast = ({ message, ind, deleteToast, styles, duration = 3000 }: ToastProps) => {
   const { position } = styles;
-  const isBottom = position?.includes('bottom');
+  const isBottom = position?.includes("bottom");
   const [width, setWidth] = useState(100);
   const [toggle, setToggle] = useState(false);
   const [delay, setDelay] = useState(100 * ind + 700);
@@ -110,8 +113,8 @@ const Toast = ({ message, ind, deleteToast, styles, duration = 3000 }: ToastProp
 
   return (
     <button
-      className={`toast ${isBottom ? 'enter-bottom' : ''} ${width !== 0 ? '' : isBottom ? 'leave-bottom' : 'leave'}`}
-      type='button'
+      className={`toast ${isBottom ? "enter-bottom" : ""} ${width !== 0 ? "" : isBottom ? "leave-bottom" : "leave"}`}
+      type="button"
       style={{ animationDelay: `${ind * 100}ms` }}
       onMouseEnter={() => clearInterval(intervalRef.current)}
       onMouseLeave={() => setToggle((t) => !t)}
@@ -121,7 +124,10 @@ const Toast = ({ message, ind, deleteToast, styles, duration = 3000 }: ToastProp
       }}
     >
       <p>{message.msg}</p>
-      <div className='toast-bar' style={{ width: width + '%', backgroundColor: colors[message.state] }}></div>
+      <div
+        className="toast-bar"
+        style={{ width: width + "%", backgroundColor: colors[message.state] }}
+      ></div>
     </button>
   );
 };
@@ -134,6 +140,10 @@ interface ToastContainerProps {
 const ToastContainer = ({ children, styles }: ToastContainerProps) => {
   const { position } = styles;
   return (
-    <div className={`toaster ${(children as ReactNode[]).length ? 'toast-container' : ''} ${position}`}>{children}</div>
+    <div
+      className={`toaster ${(children as ReactNode[]).length ? "toast-container" : ""} ${position}`}
+    >
+      {children}
+    </div>
   );
 };
