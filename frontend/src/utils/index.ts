@@ -12,23 +12,20 @@ window.fetch = async (url, options, ...rest) => {
   // Schritt 2: Antwort-Header prüfen.
   // Der WWW-Authenticate-Header wurde von unserer authenticate-Middleware gesetzt,
   // wenn der Access Token abgelaufen war.
-  const authHeader = res.headers.get('www-authenticate');
+  const authHeader = res.headers.get("www-authenticate");
 
-  if (authHeader?.includes('token_expired')) {
+  if (authHeader?.includes("token_expired")) {
     // Schritt 3: Refresh-Endpunkt aufrufen.
     // credentials: 'include' ist entscheidend – nur so schickt der Browser
     // den httpOnly-Cookie (refreshToken) mit, den er selbst nicht lesen kann.
-    const refreshRes = await originalFetch(
-      `${import.meta.env.VITE_API_URL}/auth/refresh`,
-      {
-        method: 'GET',
-        credentials: 'include',
-      }
-    );
+    const refreshRes = await originalFetch(`/api/auth/refresh`, {
+      method: "GET",
+      credentials: "include",
+    });
 
     // Schritt 4: War der Refresh erfolgreich?
     // Wenn nicht (RefreshToken abgelaufen, nicht in DB, User gelöscht...), muss sich der User neu einloggen.
-    if (!refreshRes.ok) throw new Error('Login required');
+    if (!refreshRes.ok) throw new Error("Login required");
 
     // Schritt 5: Original-Request wiederholen.
     // Der Server hat im Refresh-Schritt neue Cookies gesetzt –

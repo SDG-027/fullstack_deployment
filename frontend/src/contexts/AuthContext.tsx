@@ -29,7 +29,7 @@ const AuthContextProvider = ({ children }: Props) => {
 
   const register = async (formState: RegisterForm) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+      const res = await fetch(`/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const AuthContextProvider = ({ children }: Props) => {
 
   const login = async (formState: LoginForm) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      const res = await fetch(`/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const AuthContextProvider = ({ children }: Props) => {
 
   const logout = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+      const res = await fetch(`/api/auth/logout`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -101,7 +101,7 @@ const AuthContextProvider = ({ children }: Props) => {
   useEffect(() => {
     const refresh = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+        const res = await fetch(`/api/auth/me`, {
           method: "GET",
           credentials: "include",
         });

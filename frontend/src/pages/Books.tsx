@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { ToasterContext } from '../contexts/ToasterContext.tsx';
+import { useContext, useEffect, useState } from "react";
+import { ToasterContext } from "../contexts/ToasterContext.tsx";
 
 interface Book {
   _id: string;
@@ -11,24 +11,22 @@ interface Book {
 const Books = () => {
   const [books, setBooks] = useState<Book[] | null>(null);
   const [page, setPage] = useState(1);
-  const [, setStatus] = useState('unset'); // unset, pending, success, error
+  const [, setStatus] = useState("unset"); // unset, pending, success, error
   const toasterContext = useContext(ToasterContext);
   const toaster = toasterContext?.toaster;
 
   useEffect(() => {
     const fetchBooks = async () => {
-      setStatus('pending');
+      setStatus("pending");
 
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/books?page=${page}&limit=3`
-        );
+        const res = await fetch(`/api/books?page=${page}&limit=3`);
         const { data, message } = await res.json();
         if (!res.ok) throw new Error(message);
         setBooks(data);
-        setStatus('success');
+        setStatus("success");
       } catch (error) {
-        setStatus('error');
+        setStatus("error");
         if (error instanceof Error) {
           toaster?.error(error.message);
         }
@@ -50,10 +48,7 @@ const Books = () => {
         </button>
         {books?.map((book, ind) => {
           return (
-            <div
-              key={book._id}
-              className="card bg-base-100 w-80 border shadow-sm"
-            >
+            <div key={book._id} className="card bg-base-100 w-80 border shadow-sm">
               <figure className="min-h-60 px-10 pt-10">
                 <img
                   height={240}
@@ -69,10 +64,10 @@ const Books = () => {
                 <div className="card-actions">
                   {true && (
                     <button
-                      onClick={() => alert('CHANGE READING LIST')}
+                      onClick={() => alert("CHANGE READING LIST")}
                       className="btn btn-primary"
                     >
-                      {false ? 'Remove from' : 'Add to'} reading List
+                      {false ? "Remove from" : "Add to"} reading List
                     </button>
                   )}
                 </div>

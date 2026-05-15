@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
-import { ToasterContext } from '../contexts/ToasterContext.tsx';
-import { AuthContext } from '../contexts/AuthContext.tsx';
+import { useContext, useEffect, useState } from "react";
+import { ToasterContext } from "../contexts/ToasterContext.tsx";
+import { AuthContext } from "../contexts/AuthContext.tsx";
 
-const bookStatus = ['read', 'pending', 'wishlist'] as const;
+const bookStatus = ["read", "pending", "wishlist"] as const;
 type BookStatus = (typeof bookStatus)[number];
 
 interface BookRef {
@@ -28,14 +28,12 @@ const ReadingList = () => {
     const fetchReadingList = async () => {
       if (!user) return;
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${user._id}`
-        );
+        const res = await fetch(`/api/users/${user._id}`);
         const { data, message } = await res.json();
         if (!res.ok) throw new Error(message);
         setBooks(data.readingList);
       } catch {
-        toaster?.error('Failed to get your Reading List');
+        toaster?.error("Failed to get your Reading List");
       }
     };
 
@@ -59,7 +57,7 @@ const ReadingList = () => {
                   <select
                     value={book.status}
                     className="select select-accent capitalize"
-                    onChange={() => alert('HANDLE STATUS CHANGE')}
+                    onChange={() => alert("HANDLE STATUS CHANGE")}
                   >
                     <option disabled={true}>{book.status}</option>
                     {statuses.map((s) => (
